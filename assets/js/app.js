@@ -1,16 +1,56 @@
-/**
- * app.js
- *
- * This file contains some conventional defaults for working with Socket.io + Sails.
- * It is designed to get you up and running fast, but is by no means anything special.
- *
- * Feel free to change none, some, or ALL of this file to fit your needs!
- */
+$(function() {
 
+  // Use {{ var }} instead of <%= var %> for underscore templates
+  _.templateSettings = {
+      interpolate : /\{\{(.+?)\}\}/g
+  };
+
+
+  /****** Backbone.js Stuff ******/
+
+  var tableApp = {};
+
+  tableApp.Row = Backbone.Model.extend({});
+
+  tableApp.RowList = Backbone.Collection.extend({
+    model: tableApp.Row,
+    url: "/teams"
+  });
+
+  tableApp.RowView = Backbone.View.extend({
+    template: _.template($("#row-template").html()),
+    render: function() {
+      this.$el.html(this.template(this.model.toJSON()));
+      return this;
+    }
+  });
+
+  tableApp.TableView = Backbone.View.extend({
+    el: "#table",
+    initialize: function() {
+      tableApp.rowList.on("add", this.addOne, this);
+      tableApp.rowList.on("reset", this.addAll, this);
+      tableApp.rowList.fetch();
+    },
+    addOne: function(row) {
+      var view = new tableApp.RowView({ model: row });
+      $("#table").append(view.render().el);
+    },
+    addAll: function() {
+      $("#table").html("");
+      tableApp.rowList.each(this.addOne, this);
+    }
+  })
+
+  tableApp.rowList = new tableApp.RowList();
+  tableApp.tableView = new tableApp.TableView();
+
+  /****** End Backbone.js Stuff ******/
+
+});
 
 (function (io) {
 
-  // as soon as this file is loaded, connect automatically, 
   var socket = io.connect();
   if (typeof console !== 'undefined') {
     log('Connecting to Sails.js...');

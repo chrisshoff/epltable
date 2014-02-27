@@ -1,12 +1,21 @@
-<h1>Premier League Table</h1>
-<div class="table"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Premier League Table</h1>
+        </div>
+    </div>
 
-<script>
-$(function() {
-    $.getJSON("/teams", function(data) {
-        for (var i in data) {
-            $(".table").append("<div class=\"row\">" + data[i].position + ". " + data[i].name + " - " + data[i].points + " points</div>");
-        }
-    });
-});
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="table"></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/template" id="row-template">
+  <div class="row">
+      <div class="col-sm-1">{{ position }}</div>
+      <div class="col-sm-3">{{ name }}</div>
+      <div class="col-sm-2">{{ points }} points</div>
+  </div>
 </script>
