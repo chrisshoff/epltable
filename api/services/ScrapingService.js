@@ -1,4 +1,4 @@
-var jsdom   = require("jsdom")
+var jsdom = require("jsdom")
 
 exports.scrape = function(callback) {
     var rows = [];
@@ -10,8 +10,8 @@ exports.scrape = function(callback) {
             var $ = window.jQuery;
             $(".table .club-row").each(function() {
                 var row = {
-                    pos: $(this).find(".col-pos").text(),
-                    club: $(this).find(".col-club").text(),
+                    position: $(this).find(".col-pos").text(),
+                    name: $(this).find(".col-club").text(),
                     points: $(this).find(".col-pts").text()
                 };
 
