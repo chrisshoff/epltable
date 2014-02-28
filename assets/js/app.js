@@ -5,10 +5,12 @@ $(function() {
       interpolate : /\{\{(.+?)\}\}/g
   };
 
-
   /****** Backbone.js Stuff ******/
 
   var tableApp = {};
+
+  tableApp.GREEN_SPOTS = 4;
+  tableApp.RED_SPOTS = 3;
 
   tableApp.Row = Backbone.Model.extend({});
 
@@ -18,9 +20,33 @@ $(function() {
   });
 
   tableApp.RowView = Backbone.View.extend({
+    isEmpty: false,
     template: _.template($("#row-template").html()),
+    className: "row team-row",
+    applyColor: function(position) {
+      if (position <= tableApp.GREEN_SPOTS) { 
+        if (this.isEmpty && position == tableApp.GREEN_SPOTS) { return; }
+        this.$el.addClass("green");
+      }
+      if (position > (tableApp.rowList.length - tableApp.RED_SPOTS)) { 
+        if (this.isEmpty && position == (tableApp.rowList.length - tableApp.GREEN_SPOTS)) { return; }
+        this.$el.addClass("red");
+      }
+    },
     render: function() {
+      this.applyColor(this.model.get("position"));
+      this.$el.attr("data-points", this.model.get("points"));
       this.$el.html(this.template(this.model.toJSON()));
+      return this;
+    }
+  });
+
+  tableApp.EmptyRowView = tableApp.RowView.extend({
+    isEmpty: true,
+    className: "row team-row empty",
+    render: function() {
+      this.applyColor($("#table .team-row:not(.empty):last .position").text());
+      this.$el.html(this.template({ position:"", points:"", name:"" }));
       return this;
     }
   });
@@ -28,22 +54,70 @@ $(function() {
   tableApp.TableView = Backbone.View.extend({
     el: "#table",
     initialize: function() {
-      tableApp.rowList.on("add", this.addOne, this);
-      tableApp.rowList.on("reset", this.addAll, this);
-      tableApp.rowList.fetch();
+      tableApp.rowList.fetch().done(this.render);
     },
-    addOne: function(row) {
-      var view = new tableApp.RowView({ model: row });
-      $("#table").append(view.render().el);
-    },
-    addAll: function() {
+    render: function() {
       $("#table").html("");
-      tableApp.rowList.each(this.addOne, this);
+      tableApp.rowList.each(function(row) {
+        var view = new tableApp.RowView({ model: row });
+        $("#table").append(view.render().el);
+      }, this);
     }
-  })
+  });
+
+  tableApp.CannTableView = tableApp.TableView.extend({
+    render: function(row) {
+      $("#table").html("");
+      tableApp.rowList.each(function(row) {
+        var view = new tableApp.RowView({ model: row });
+        var extra_rows;
+
+        if (row.get("position") > 1) {
+          var last_points = $("#table .team-row:last").data("points");
+          var this_points = row.get("points");
+          extra_rows = last_points - this_points - 1;
+
+          if (extra_rows > 0) {
+            for (var i = 0; i < extra_rows; i++) {
+              $("#table").append((new tableApp.EmptyRowView()).render().el);
+            }
+          }
+        }
+
+        if (extra_rows == -1 && row.get("position") > 1) {
+          $("#table .team-row:not(.empty):last").find(".name").append("<br />" + row.get("name"));
+        } else {
+          $("#table").append(view.render().el);
+        }
+      }, this);
+    }
+  });
+
+  tableApp.Router = Backbone.Router.extend({
+    routes : {
+      "" : "default",
+      "default" : "default",
+      "cann" : "cann"
+    },
+
+    default : function() {
+      tableApp.view = new tableApp.TableView();
+    },
+
+    cann : function() {
+      tableApp.view = new tableApp.CannTableView();
+    }
+  });
+
+  $("#table-selector").on("change", function(e) {
+    tableApp.router.navigate($(this).val(), { trigger: true });
+  });
 
   tableApp.rowList = new tableApp.RowList();
-  tableApp.tableView = new tableApp.TableView();
+  tableApp.router = new tableApp.Router();
+
+  Backbone.history.start();
+  $("#table-selector").val(Backbone.history.fragment);
 
   /****** End Backbone.js Stuff ******/
 
