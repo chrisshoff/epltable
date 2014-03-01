@@ -10,6 +10,7 @@ $(function() {
   var tableApp = {};
 
   tableApp.GREEN_SPOTS = 4;
+  tableApp.ALT_GREEN_SPOTS = 1;
   tableApp.RED_SPOTS = 3;
 
   tableApp.Row = Backbone.Model.extend({});
@@ -22,11 +23,19 @@ $(function() {
   tableApp.RowView = Backbone.View.extend({
     isEmpty: false,
     template: _.template($("#row-template").html()),
-    className: "row team-row",
+    tagName: "tr",
+    className: "team-row",
     applyColor: function(position) {
       if (position <= tableApp.GREEN_SPOTS) { 
-        if (this.isEmpty && position == tableApp.GREEN_SPOTS) { return; }
-        this.$el.addClass("green");
+        if (this.isEmpty && position == tableApp.GREEN_SPOTS) {
+          this.$el.addClass("alt_green");
+        } else {
+          this.$el.addClass("green");
+        }
+      }
+      if (position <= (tableApp.GREEN_SPOTS + tableApp.ALT_GREEN_SPOTS) && position > tableApp.GREEN_SPOTS) { 
+        if (this.isEmpty && position == (tableApp.ALT_GREEN_SPOTS + tableApp.GREEN_SPOTS)) { return; }
+        this.$el.addClass("alt_green");
       }
       if (position > (tableApp.rowList.length - tableApp.RED_SPOTS)) { 
         if (this.isEmpty && position == (tableApp.rowList.length - tableApp.GREEN_SPOTS)) { return; }
@@ -43,51 +52,51 @@ $(function() {
 
   tableApp.EmptyRowView = tableApp.RowView.extend({
     isEmpty: true,
-    className: "row team-row empty",
+    className: "team-row empty",
     render: function() {
-      this.applyColor($("#table .team-row:not(.empty):last .position").text());
-      this.$el.html(this.template({ position:"", points:"", name:"" }));
+      this.applyColor($(".table_body .team-row:not(.empty):last .position").text());
+      this.$el.html(this.template({ position:"", points:"", name:"", slug:"" }));
       return this;
     }
   });
 
   tableApp.TableView = Backbone.View.extend({
-    el: "#table",
+    el: ".table_body",
     initialize: function() {
       tableApp.rowList.fetch().done(this.render);
     },
     render: function() {
-      $("#table").html("");
+      $(".table_body").html("");
       tableApp.rowList.each(function(row) {
         var view = new tableApp.RowView({ model: row });
-        $("#table").append(view.render().el);
+        $(".table_body").append(view.render().el);
       }, this);
     }
   });
 
   tableApp.CannTableView = tableApp.TableView.extend({
     render: function(row) {
-      $("#table").html("");
+      $(".table_body").html("");
       tableApp.rowList.each(function(row) {
         var view = new tableApp.RowView({ model: row });
         var extra_rows;
 
         if (row.get("position") > 1) {
-          var last_points = $("#table .team-row:last").data("points");
+          var last_points = $(".table_body .team-row:last").data("points");
           var this_points = row.get("points");
           extra_rows = last_points - this_points - 1;
 
           if (extra_rows > 0) {
             for (var i = 0; i < extra_rows; i++) {
-              $("#table").append((new tableApp.EmptyRowView()).render().el);
+              $(".table_body").append((new tableApp.EmptyRowView()).render().el);
             }
           }
         }
 
         if (extra_rows == -1 && row.get("position") > 1) {
-          $("#table .team-row:not(.empty):last").find(".name").append("<br />" + row.get("name"));
+          $(".table_body .team-row:not(.empty):last").find(".name").append("<br />" + "<img src=\"/images/img_trans.png\" class=\"logo " + row.get("slug") + "_logo\" /> " + row.get("name"));
         } else {
-          $("#table").append(view.render().el);
+          $(".table_body").append(view.render().el);
         }
       }, this);
     }
@@ -117,7 +126,10 @@ $(function() {
   tableApp.router = new tableApp.Router();
 
   Backbone.history.start();
-  $("#table-selector").val(Backbone.history.fragment);
+  console.log(Backbone.history.fragment);
+  if (Backbone.history.fragment !== "") {
+    $("#table-selector").val(Backbone.history.fragment);
+  }
 
   /****** End Backbone.js Stuff ******/
 

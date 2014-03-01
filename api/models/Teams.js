@@ -10,6 +10,7 @@ module.exports = {
 
   attributes: {
     name: "STRING",
+    slug: "STRING",
     position: "INTEGER",
     points: "INTEGER"
   }
