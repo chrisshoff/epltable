@@ -1,10 +1,11 @@
 <style>
+h1 { font-family: 'Alegreya Sans', sans-serif; margin-top:50px; }
 .container { margin-top:30px; }
 .alt_green { background-color:#ECF2EB; }
 .green { background-color:#E0EBDF; }
 .red { background-color:#EBDFDF; }
 
-.logo { height:24px; width:24px; background:url(/images/logosprite.png) 100px 100px; margin:3px 12px; vertical-align:text-bottom; }
+.logo { height:24px; width:24px; background:url(/images/logosprite.png) 100px 100px; margin:2px 12px; vertical-align:text-bottom; }
 .arsenal_logo { background-position:-2px -6px; }
 .aston_villa_logo { background-position:-24px -6px; }
 .cardiff_city_logo { background-position:-47px -6px; }
@@ -25,10 +26,15 @@
 .tottenham_hotspur_logo { background-position:-451px -6px; }
 .west_bromwich_albion_logo { background-position:-474px -6px; }
 .west_ham_united_logo { background-position:-499px -6px; }
+
+.barclays_logo { height:36px; width:150px; background:url(/images/logosprite.png) 0px -45px; }
 </style>
 
 <div class="container">
     <div class="row">
+        <div class="col-sm-2">
+            <img src="/images/img_trans.png" class="barclays_logo" />
+        </div>
         <div class="col-sm-3">
           <select id="table-selector" class="form-control">
             <option value="default">Default Table</option>
