@@ -18,7 +18,11 @@
 module.exports = {
     
   view : function(req, res) {
-    res.view();
+    PropertiesService.get("last_updated", function(last_updated) {
+        res.view({
+            last_updated: last_updated.value
+        });
+    });
   },
 
 

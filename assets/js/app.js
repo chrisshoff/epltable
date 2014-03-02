@@ -55,7 +55,7 @@ $(function() {
     className: "team-row empty",
     render: function() {
       this.applyColor($(".table_body .team-row:not(.empty):last .position").text());
-      this.$el.html(this.template({ position:"", points:"", name:"", slug:"" }));
+      this.$el.html(this.template({ position:"", points:"", name:"", slug:"", gd:"" }));
       return this;
     }
   });

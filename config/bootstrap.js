@@ -1,3 +1,5 @@
+var moment = require("moment");
+
 /**
  * Bootstrap
  *
@@ -13,7 +15,7 @@ module.exports.bootstrap = function (cb) {
   // It's very important to trigger this callack method when you are finished 
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
   update_data();
-  setInterval(update_data, 3600000);
+  setInterval(update_data, 600000);
   cb();
 };
 
@@ -32,5 +34,7 @@ function update_data() {
                 }
             });
         }
+
+        PropertiesService.set("last_updated", moment().format("YYYY-MM-DD hh:mmA"), function(property) {});
     });
 }

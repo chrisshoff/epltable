@@ -1,61 +1,28 @@
-<style>
-h1 { font-family: 'Alegreya Sans', sans-serif; margin-top:50px; }
-.container { margin-top:30px; }
-.alt_green { background-color:#ECF2EB; }
-.green { background-color:#E0EBDF; }
-.red { background-color:#EBDFDF; }
-
-.logo { height:24px; width:24px; background:url(/images/logosprite.png) 100px 100px; margin:2px 12px; vertical-align:text-bottom; }
-.arsenal_logo { background-position:-2px -6px; }
-.aston_villa_logo { background-position:-24px -6px; }
-.cardiff_city_logo { background-position:-47px -6px; }
-.chelsea_logo { background-position:-72px -6px; }
-.crystal_palace_logo { background-position:-96px -6px; }
-.everton_logo { background-position:-120px -6px; }
-.fulham_logo { background-position:-144px -6px; }
-.hull_city_logo { background-position:-169px -6px; }
-.liverpool_logo { background-position:-193px -6px; }
-.manchester_city_logo { background-position:-215px -6px; }
-.manchester_united_logo { background-position:-239px -6px; }
-.newcastle_united_logo { background-position:-267px -6px; }
-.norwich_city_logo { background-position:-291px -6px; }
-.southampton_logo { background-position:-343px -6px; }
-.stoke_city_logo { background-position:-369px -6px; }
-.sunderland_logo { background-position:-398px -6px; }
-.swansea_city_logo { background-position:-429px -6px; }
-.tottenham_hotspur_logo { background-position:-451px -6px; }
-.west_bromwich_albion_logo { background-position:-474px -6px; }
-.west_ham_united_logo { background-position:-499px -6px; }
-
-.barclays_logo { height:36px; width:150px; background:url(/images/logosprite.png) 0px -45px; }
-</style>
-
 <div class="container">
     <div class="row">
-        <div class="col-sm-2">
-            <img src="/images/img_trans.png" class="barclays_logo" />
-        </div>
         <div class="col-sm-3">
-          <select id="table-selector" class="form-control">
-            <option value="default">Default Table</option>
-            <option value="cann">Cann Table</option>
-          </select>
+            <select id="table-selector" class="form-control">
+                <option value="default">Default Table</option>
+                <option value="cann">Cann Table</option>
+            </select>
         </div>
     </div>
 
     <div class="row">
         <div class="col-sm-8">
             <h1>Premier League Table</h1>
+            <div class="time">Last updated: <%= last_updated %></div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-10">
             <table class="table">
                 <thead>
                 <tr>
                 <th>Position</th>
                 <th>Club</th>
+                <th class="hidden-xs">Goal Difference</th>
                 <th>Points</th>
                 </tr>
                 </thead>
@@ -68,5 +35,6 @@ h1 { font-family: 'Alegreya Sans', sans-serif; margin-top:50px; }
 <script type="text/template" id="row-template">
     <td class="position">{{ position }}</td>
     <td class="name"><img src="/images/img_trans.png" class="logo {{ slug }}_logo" /> {{ name }}</td>
+    <td class="gd hidden-xs">{{ gd }}</td>
     <td class="points">{{ points }}</td>
 </script>

@@ -12,6 +12,7 @@ module.exports = {
     name: "STRING",
     slug: "STRING",
     position: "INTEGER",
+    gd: "INTEGER",
     points: "INTEGER"
   }
 

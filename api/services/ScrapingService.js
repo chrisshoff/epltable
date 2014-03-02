@@ -14,8 +14,9 @@ exports.scrape = function(callback) {
                 var row = {
                     position: $(this).find(".col-pos").text(),
                     name: name,
+                    slug: slug,
                     points: $(this).find(".col-pts").text(),
-                    slug: slug
+                    gd: $(this).find(".col-gd").text()
                 };
 
                 rows.push(row);
