@@ -1,6 +1,5 @@
 exports.set = function(name, value, callback) {
     Properties.findOne({ name : name }, function(err, existing_property) {
-        console.log(existing_property);
         if (existing_property) {
             existing_property.value = value;
             existing_property.save(function(err) {});

@@ -13,7 +13,8 @@ module.exports = {
     slug: "STRING",
     position: "INTEGER",
     gd: "INTEGER",
-    points: "INTEGER"
+    points: "INTEGER",
+    matches: "ARRAY"
   }
 
 };
