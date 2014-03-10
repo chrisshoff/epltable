@@ -13,6 +13,8 @@ $(function() {
   tableApp.ALT_GREEN_SPOTS = 1;
   tableApp.RED_SPOTS = 3;
 
+  tableApp.menu_open = false;
+
   tableApp.Row = Backbone.Model.extend({});
 
   tableApp.RowList = Backbone.Collection.extend({
@@ -26,18 +28,18 @@ $(function() {
     tagName: "tr",
     className: "team-row",
     applyColor: function(position) {
-      if (position <= tableApp.GREEN_SPOTS) { 
+      if (position <= tableApp.GREEN_SPOTS) {
         if (this.isEmpty && position == tableApp.GREEN_SPOTS) {
           this.$el.addClass("alt_green");
         } else {
           this.$el.addClass("green");
         }
       }
-      if (position <= (tableApp.GREEN_SPOTS + tableApp.ALT_GREEN_SPOTS) && position > tableApp.GREEN_SPOTS) { 
+      if (position <= (tableApp.GREEN_SPOTS + tableApp.ALT_GREEN_SPOTS) && position > tableApp.GREEN_SPOTS) {
         if (this.isEmpty && position == (tableApp.ALT_GREEN_SPOTS + tableApp.GREEN_SPOTS)) { return; }
         this.$el.addClass("alt_green");
       }
-      if (position > (tableApp.rowList.length - tableApp.RED_SPOTS)) { 
+      if (position > (tableApp.rowList.length - tableApp.RED_SPOTS)) {
         if (this.isEmpty && position == (tableApp.rowList.length - tableApp.GREEN_SPOTS)) { return; }
         this.$el.addClass("red");
       }
@@ -118,20 +120,45 @@ $(function() {
     }
   });
 
-  $("#table-selector").on("change", function(e) {
-    tableApp.router.navigate($(this).val(), { trigger: true });
-  });
+  // $("#table-selector").on("change", function(e) {
+  //   tableApp.router.navigate($(this).val(), { trigger: true });
+  // });
 
   tableApp.rowList = new tableApp.RowList();
   tableApp.router = new tableApp.Router();
 
   Backbone.history.start();
-  console.log(Backbone.history.fragment);
+
   if (Backbone.history.fragment !== "") {
     $("#table-selector").val(Backbone.history.fragment);
   }
 
   /****** End Backbone.js Stuff ******/
+
+  tableApp.toggleMenu = function(show) {
+    if (!tableApp.menu_open) {
+      tableApp.menu_open = true;
+      $("#menu").show().animate({
+        "margin-left" : "0px"
+      }, 300);
+      $(".dim").fadeIn(300);
+    } else {
+      tableApp.menu_open = false;
+      $("#menu").show().animate({
+        "margin-left" : "-200px"
+      }, 300);
+      $(".dim").fadeOut(300);
+    }
+  }
+
+  $(".toggle-menu").on("click", function(e) {
+    tableApp.toggleMenu();
+  });
+
+  $("#menu ul li").on("click", function(e) {
+    tableApp.toggleMenu();
+    tableApp.router.navigate($(this).data("view"), { trigger: true });
+  });
 
 });
 
@@ -160,12 +187,12 @@ $(function() {
 
     ///////////////////////////////////////////////////////////
     // Here's where you'll want to add any custom logic for
-    // when the browser establishes its socket connection to 
+    // when the browser establishes its socket connection to
     // the Sails.js server.
     ///////////////////////////////////////////////////////////
     log(
-        'Socket is now connected and globally accessible as `socket`.\n' + 
-        'e.g. to send a GET request to Sails, try \n' + 
+        'Socket is now connected and globally accessible as `socket`.\n' +
+        'e.g. to send a GET request to Sails, try \n' +
         '`socket.get("/", function (response) ' +
         '{ console.log(response); })`'
     );
@@ -186,7 +213,7 @@ $(function() {
       console.log.apply(console, arguments);
     }
   }
-  
+
 
 })(
 

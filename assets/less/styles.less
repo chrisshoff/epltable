@@ -1,16 +1,73 @@
+@darkblue: #3498db;
+@lightblue: #84B6E1;
+
+body { padding-top:70px; }
 h1 { font-family: 'Alegreya Sans', sans-serif; margin-top:50px; }
 
-.container { margin-top:30px; }
 .alt_green { background-color:#ECF2EB; }
 .green { background-color:#E0EBDF; }
 .red { background-color:#EBDFDF; }
 
-.table {
-    margin-top:35px;
+.navbar {
+  background-color:@darkblue;
 
+  &.navbar-fixed-top {
+    border:0px;
+  }
+
+  .navbar-brand {
+    float:right;
+    color:#FFFFFF;
+    font-weight:bold;
+  }
+
+  .container-fluid {
+    padding-left:0px;
+
+    img {
+      cursor:pointer;
+    }
+  }
+}
+
+.dim {
+  display:none;
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0px;
+  left:0px;
+  background-color:#000000;
+  opacity:0.6;
+  z-index:40;
+}
+
+#menu {
+  display:none;
+  position:fixed;
+  top:50px;
+  left:0px;
+  bottom:0px;
+  width:200px;
+  margin-left:-200px;
+  background-color:@lightblue;
+  color:#FFFFFF;
+  z-index:50;
+
+  ul {
+    margin-top:10px;
+
+    li {
+      font-size:18px;
+      padding:15px;
+    }
+  }
+}
+
+.table {
     tbody {
         tr {
-            td {   
+            td {
                 padding:3px;
                 border:0px;
                 vertical-align:middle;
@@ -25,8 +82,8 @@ h1 { font-family: 'Alegreya Sans', sans-serif; margin-top:50px; }
     margin-left:5px;
 }
 
-.logo { 
-    height:24px; width:24px; background:url(/images/logosprite.png) 100px 100px; margin:0px 12px; vertical-align:middle; 
+.logo {
+    height:24px; width:24px; background:url(/images/logosprite.png) 100px 100px; margin:0px 12px; vertical-align:middle;
 
     &.arsenal_logo { background-position:-2px -6px; }
     &.aston_villa_logo { background-position:-24px -6px; }
