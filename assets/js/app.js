@@ -131,6 +131,9 @@ $(function() {
 
   if (Backbone.history.fragment !== "") {
     $("#table-selector").val(Backbone.history.fragment);
+    $(".nav li[data-view='" + Backbone.history.fragment + "']").addClass("selected");
+  } else {
+    $(".nav li[data-view='default']").addClass("selected");
   }
 
   /****** End Backbone.js Stuff ******/
@@ -158,6 +161,8 @@ $(function() {
   $("#menu ul li").on("click", function(e) {
     tableApp.toggleMenu();
     tableApp.router.navigate($(this).data("view"), { trigger: true });
+    $(".nav li").removeClass("selected");
+    $(this).addClass("selected");
   });
 
 });
