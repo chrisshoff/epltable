@@ -2,7 +2,7 @@
  * Teams
  *
  * @module      :: Team model
- * @description :: 
+ * @description ::
  * @docs		:: http://sailsjs.org/#!documentation/models
  */
 
@@ -14,7 +14,8 @@ module.exports = {
     position: "INTEGER",
     gd: "INTEGER",
     points: "INTEGER",
-    matches: "ARRAY"
+    matches: "ARRAY",
+    played: "INTEGER"
   }
 
 };

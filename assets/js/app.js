@@ -14,6 +14,7 @@ $(function() {
   tableApp.RED_SPOTS = 3;
 
   tableApp.menu_open = false;
+  tableApp.games_played = $("#games_played").val();
 
   tableApp.Row = Backbone.Model.extend({});
 
@@ -47,6 +48,12 @@ $(function() {
     render: function() {
       this.applyColor(this.model.get("position"));
       this.$el.attr("data-points", this.model.get("points"));
+      var games_in_hand = tableApp.games_played - this.model.get("played");
+      if (games_in_hand > 0) {
+        this.model.set("games_in_hand", "(" + games_in_hand + ")")
+      } else {
+        this.model.set("games_in_hand", "");
+      }
       this.$el.html(this.template(this.model.toJSON()));
       return this;
     }
@@ -57,7 +64,7 @@ $(function() {
     className: "team-row empty",
     render: function() {
       this.applyColor($(".table_body .team-row:not(.empty):last .position").text());
-      this.$el.html(this.template({ position:"", points:"", name:"", slug:"", gd:"" }));
+      this.$el.html(this.template({ position:"", points:"", name:"", slug:"", gd:"", games_in_hand:"" }));
       return this;
     }
   });
@@ -96,7 +103,12 @@ $(function() {
         }
 
         if (extra_rows == -1 && row.get("position") > 1) {
-          $(".table_body .team-row:not(.empty):last").find(".name").append("<br />" + "<img src=\"/images/img_trans.png\" class=\"logo " + row.get("slug") + "_logo\" /> " + row.get("name"));
+          var tied_club_line = "<br />" + "<img src=\"/images/img_trans.png\" class=\"logo " + row.get("slug") + "_logo\" /> " + row.get("name");
+          if (tableApp.games_played - row.get("played") > 0) {
+            tied_club_line += " (" + (tableApp.games_played - row.get("played")) + ")";
+          }
+
+          $(".table_body .team-row:not(.empty):last").find(".name").append(tied_club_line);
         } else {
           $(".table_body").append(view.render().el);
         }

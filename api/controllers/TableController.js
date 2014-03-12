@@ -16,12 +16,15 @@
  */
 
 module.exports = {
-    
+
   view : function(req, res) {
     PropertiesService.get("last_updated", function(last_updated) {
+      PropertiesService.get("most_played_games", function(most_played_games) {
         res.view({
-            last_updated: last_updated.value
+            last_updated: last_updated.value,
+            most_played_games: most_played_games.value
         });
+      });
     });
   },
 
@@ -32,5 +35,5 @@ module.exports = {
    */
   _config: {}
 
-  
+
 };

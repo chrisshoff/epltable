@@ -1,3 +1,5 @@
+<input type="hidden" id="games_played" value="<%= most_played_games %>" />
+
 <div class="container">
     <div class="row">
         <div class="col-sm-10">
@@ -18,7 +20,7 @@
 
 <script type="text/template" id="row-template">
     <td class="ctr position">{{ position }}</td>
-    <td class="name"><img src="/images/img_trans.png" class="logo {{ slug }}_logo" /> {{ name }}</td>
+    <td class="name"><img src="/images/img_trans.png" class="logo {{ slug }}_logo" /> {{ name }} {{ games_in_hand }}</td>
     <td class="gd hidden-xs">{{ gd }}</td>
     <td class="ctr points">{{ points }}</td>
 </script>

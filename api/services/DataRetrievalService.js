@@ -38,6 +38,7 @@ exports.init_table_data_update = function(interval) {
 
 function update_table_data(callback) {
     DataRetrievalService.scrape_table_data(function(rows) {
+        var most_played_games = 0;
         for (var i in rows) {
             var thisPosition = Teams.findOne({ position : rows[i].position }, function(err, existing_row) {
                 if (existing_row) {
@@ -45,14 +46,22 @@ function update_table_data(callback) {
                     existing_row.name = rows[i].name;
                     existing_row.points = rows[i].points;
                     existing_row.save(function(err) {});
+                    if (existing_row.played > most_played_games) {
+                      most_played_games = existing_row.played;
+                    }
                 } else {
                     // Create new team at position
-                    Teams.create(rows[i]).done(function(err, created_row) {});
+                    Teams.create(rows[i]).done(function(err, created_row) {
+                      if (created_row.played > most_played_games) {
+                        most_played_games = created_row.played;
+                      }
+                    });
                 }
             });
         }
 
         PropertiesService.set("last_updated", moment().format("YYYY-MM-DD hh:mmA"), function(property) {});
+        PropertiesService.set("most_played_games", most_played_games, function(property) {});
         callback();
     });
 }
@@ -104,10 +113,10 @@ exports.scrape_team_results_data = function(callback) {
 
 exports.scrape_table_data = function(callback) {
     var rows = [];
-    
+
     jsdom.env(
         "http://www.premierleague.com/en-gb/matchday/league-table.html",
-        [jquery_url], 
+        [jquery_url],
         function(err, window) {
             var $ = window.jQuery;
             $(".table .club-row").each(function() {
@@ -118,7 +127,8 @@ exports.scrape_table_data = function(callback) {
                     name: name,
                     slug: slug,
                     points: $(this).find(".col-pts").text(),
-                    gd: $(this).find(".col-gd").text()
+                    gd: $(this).find(".col-gd").text(),
+                    played: $(this).find(".col-p").text()
                 };
 
                 rows.push(row);
