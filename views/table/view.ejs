@@ -4,10 +4,10 @@
             <table class="table">
                 <thead>
                 <tr>
-                <th>Position</th>
+                <th class="ctr">#</th>
                 <th>Club</th>
                 <th class="hidden-xs">Goal Difference</th>
-                <th>Points</th>
+                <th class="ctr">Pts</th>
                 </tr>
                 </thead>
                 <tbody class="table_body"></tbody>
@@ -17,8 +17,8 @@
 </div>
 
 <script type="text/template" id="row-template">
-    <td class="position">{{ position }}</td>
+    <td class="ctr position">{{ position }}</td>
     <td class="name"><img src="/images/img_trans.png" class="logo {{ slug }}_logo" /> {{ name }}</td>
     <td class="gd hidden-xs">{{ gd }}</td>
-    <td class="points">{{ points }}</td>
+    <td class="ctr points">{{ points }}</td>
 </script>
